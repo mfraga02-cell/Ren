@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carta Digital Interactiva 💌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: #2e2e2e;
+      color: #f4f4f4;
+      overflow: hidden;
+    }
+
+    /* --- Pantalla inicial --- */
+    #pantalla1 {
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1s ease;
+    }
+
+    #pantalla1 h1 {
+      font-size: 2em;
+      color: #f4f4f4;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+    }
+
+    #botonAbrir {
+      background: #f4f4f4;
+      color: #2e2e2e;
+      border: none;
+      padding: 15px 35px;
+      font-size: 1.1em;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    #botonAbrir:hover {
+      background: #dcdcdc;
+      transform: scale(1.05);
+    }
+
+    /* --- Pantalla 2 (contenido) --- */
+    #pantalla2 {
+      display: none;
+      height: 100vh;
+      text-align: center;
+      background: #2e2e2e;
+      position: relative;
+      overflow: hidden;
+      color: #f4f4f4;
+    }
+
+    h2 {
+      margin-top: 30px;
+      color: #f4f4f4;
+    }
+
+    /* --- Carrusel --- */
+    .slider {
+      position: relative;
+      width: 80%;
+      max-width: 500px;
+      margin: 40px auto;
+      overflow: hidden;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      background: #000;
+    }
+
+    .slides {
+      display: flex;
+      transition: transform 1s ease-in-out;
+    }
+
+    .slides img {
+      width: 100%;
+      flex-shrink: 0;
+      border-radius: 20px;
+      object-fit: contain;
+      background: #000;
+      max-height: 400px; /* 👉 limita el tamaño vertical */
+    }
+
+    .controles {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+
+    .controles button {
+      background: rgba(0, 0, 0, 0.4);
+      border: none;
+      font-size: 2em;
+      cursor: pointer;
+      border-radius: 50%;
+      padding: 5px 15px;
+      color: #f4f4f4;
+      pointer-events: all;
+      transition: background 0.3s ease;
+    }
+
+    .controles button:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .mensaje {
+      font-size: 1.2em;
+      color: #f4f4f4;
+      margin: 10px auto;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .signature {
+      margin-top: 10px;
+      font-style: italic;
+      color: #c0c0c0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Pantalla inicial -->
+  <div id="pantalla1">
+    <button id="botonAbrir">💌 Abrir carta</button>
+  </div>
+
+  <!-- Pantalla 2 -->
+  <div id="pantalla2">
+
+    <div class="slider">
+      <div class="slides" id="slides">
+        <img src="imagenes/1.jpg" alt="1" />
+        <img src="imagenes/2.jpg" alt="2" />
+        <img src="imagenes/3.jpg" alt="3" />
+      </div>
+
+      <div class="controles">
+        <button id="prev">‹</button>
+        <button id="next">›</button>
+      </div>
+    </div>
+
+    <p class="mensaje">Felices 30 meses ❤️</p>
+    <p class="signature">Con amor,<br />Mery</p>
+  </div>
+
+  <script>
+    // --- Mostrar pantalla 2 ---
+    const boton = document.getElementById("botonAbrir");
+    const p1 = document.getElementById("pantalla1");
+    const p2 = document.getElementById("pantalla2");
+
+    boton.addEventListener("click", () => {
+      p1.style.opacity = "0";
+      setTimeout(() => {
+        p1.style.display = "none";
+        p2.style.display = "block";
+      }, 1000);
+    });
+
+    // --- Carrusel dinámico ---
+    const slides = document.getElementById("slides");
+    const total = slides.children.length;
+    let index = 0;
+
+    function updateWidth() {
+      slides.style.width = `${total * 100}%`;
+      for (let i = 0; i < total; i++) {
+        slides.children[i].style.width = `${100 / total}%`;
+      }
+    }
+
+    updateWidth();
+
+    document.getElementById("next").addEventListener("click", () => {
+      index = (index + 1) % total;
+      slides.style.transform = `translateX(-${index * (100 / total)}%)`;
+    });
+
+    document.getElementById("prev").addEventListener("click", () => {
+      index = (index - 1 + total) % total;
+      slides.style.transform = `translateX(-${index * (100 / total)}%)`;
+    });
+  </script>
+</body>
+</html>
